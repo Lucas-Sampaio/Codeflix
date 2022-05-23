@@ -6,16 +6,8 @@ using DomainEntity = Codeflix.Catalog.Domain.AggregatesModel.Category;
 
 namespace Codeflix.Catalog.UnitTests.Domain.Entity.Category;
 
-[Collection(nameof(CategoryTestFixtureCollection))]
 public class CategoryTest
 {
-    private readonly CategoryTestFixture _categoryTestFixture;
-
-    public CategoryTest(CategoryTestFixture categoryTestFixture)
-    {
-        _categoryTestFixture = categoryTestFixture;
-    }
-
     [Fact(DisplayName = nameof(Instantiate))]
     [Trait("Domain", "Category - Aggregates")]
     public void Instantiate()
@@ -79,7 +71,7 @@ public class CategoryTest
     [InlineData("  ")]
     public void InstantiateErrorNameInvalid(string name)
     {
-        var validCategory = _categoryTestFixture.GetValidCategory();
+        var validCategory = GetValidCategory();
         var action = () => new DomainEntity(name, validCategory.Description);
 
         var exception = Assert.Throws<EntityValidationException>(action);
@@ -93,7 +85,7 @@ public class CategoryTest
     [InlineData("ca")]
     public void InstantiateErrorWhenNameIsLessThan3Characters(string name)
     {
-        var validCategory = _categoryTestFixture.GetValidCategory();
+        var validCategory = GetValidCategory();
         var action = () => new DomainEntity(name, validCategory.Description);
 
         var exception = Assert.Throws<EntityValidationException>(action);
@@ -104,7 +96,7 @@ public class CategoryTest
     [Trait("Domain", "Category - Aggregates")]
     public void InstantiateErrorWhenNameIsGreatherThan255Characters()
     {
-        var validCategory = _categoryTestFixture.GetValidCategory();
+        var validCategory = GetValidCategory();
         var invalidName = string.Join(null, Enumerable.Range(1, 256).Select(_ => "a"));
         var action = () => new DomainEntity(invalidName, validCategory.Description);
 
@@ -116,7 +108,7 @@ public class CategoryTest
     [Trait("Domain", "Category - Aggregates")]
     public void InstantiateErrorWhenNameIsGreatherThan10000Characters()
     {
-        var validCategory = _categoryTestFixture.GetValidCategory();
+        var validCategory = GetValidCategory();
         var invalidDescription = string.Join(null, Enumerable.Range(1, 10_001).Select(_ => "a"));
         var action = () => new DomainEntity(validCategory.Name, invalidDescription);
 
@@ -143,7 +135,7 @@ public class CategoryTest
     public void Deactivate()
     {
         //Arrange
-        var category = _categoryTestFixture.GetValidCategory();
+        var category = GetValidCategory();
 
         //Action
         category.Deactivate();
@@ -157,7 +149,7 @@ public class CategoryTest
     public void Update()
     {
         //Arrange
-        var category = _categoryTestFixture.GetValidCategory();
+        var category = GetValidCategory();
         var newValues = new { name = "new category", description = "new description" };
         //Action
         category.Update(newValues.name, newValues.description);
@@ -171,7 +163,7 @@ public class CategoryTest
     [Trait("Domain", "Category - Aggregates")]
     public void UpdateErrorWhenNameIsGreatherThan255Characters()
     {
-        var category = _categoryTestFixture.GetValidCategory();
+        var category = GetValidCategory();
         var invalidName = string.Join(null, Enumerable.Range(1, 256).Select(_ => "a"));
         var action = () => category.Update(invalidName, "categoria description");
 
@@ -185,7 +177,7 @@ public class CategoryTest
     [InlineData("  ")]
     public void UpdateErrorNameInvalid(string invalidName)
     {
-        var category = _categoryTestFixture.GetValidCategory();
+        var category = GetValidCategory();
         var action = () => category.Update(invalidName, "categoria description");
 
         var exception = Assert.Throws<EntityValidationException>(action);
@@ -199,7 +191,7 @@ public class CategoryTest
     [InlineData("ca")]
     public void UpdateErrorWhenNameIsLessThan3Characters(string invalidName)
     {
-        var category = _categoryTestFixture.GetValidCategory();
+        var category = GetValidCategory();
         var action = () => category.Update(invalidName, "categoria description");
 
         var exception = Assert.Throws<EntityValidationException>(action);
@@ -210,11 +202,16 @@ public class CategoryTest
     [Trait("Domain", "Category - Aggregates")]
     public void UpdateErrorWhenNameIsGreatherThan10000Characters()
     {
-        var category = _categoryTestFixture.GetValidCategory();
+        var category = GetValidCategory();
         var invalidDescription = string.Join(null, Enumerable.Range(1, 10_001).Select(_ => "a"));
         var action = () => category.Update("Categoria name", invalidDescription);
 
         var exception = Assert.Throws<EntityValidationException>(action);
         Assert.Equal("Description não pode ser maior que 10.000 caracteres", exception.Message);
+    }
+
+    private DomainEntity GetValidCategory()
+    {
+        return new("Category name", "Category description");
     }
 }
