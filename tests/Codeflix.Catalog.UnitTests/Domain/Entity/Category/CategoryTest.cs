@@ -75,7 +75,7 @@ public class CategoryTest
         var action = () => new DomainEntity(name, validCategory.Description);
 
         var exception = Assert.Throws<EntityValidationException>(action);
-        Assert.Equal("Name não pode ser vazio", exception.Message);
+        Assert.Equal("Name não pode ser nulo ou vazio", exception.Message);
     }
 
     [Theory(DisplayName = nameof(InstantiateErrorWhenNameIsLessThan3Characters))]
@@ -89,7 +89,7 @@ public class CategoryTest
         var action = () => new DomainEntity(name, validCategory.Description);
 
         var exception = Assert.Throws<EntityValidationException>(action);
-        Assert.Equal("Name tem que ser maior que 3 caracteres", exception.Message);
+        Assert.Equal("Name não pode ser menor do que 3 caracteres", exception.Message);
     }
 
     [Fact(DisplayName = nameof(InstantiateErrorWhenNameIsGreatherThan255Characters))]
@@ -101,7 +101,7 @@ public class CategoryTest
         var action = () => new DomainEntity(invalidName, validCategory.Description);
 
         var exception = Assert.Throws<EntityValidationException>(action);
-        Assert.Equal("Name não pode ser maior que 255 caracteres", exception.Message);
+        Assert.Equal("Name não pode ser maior do que 255 caracteres", exception.Message);
     }
 
     [Fact(DisplayName = nameof(InstantiateErrorWhenNameIsGreatherThan10000Characters))]
@@ -113,7 +113,7 @@ public class CategoryTest
         var action = () => new DomainEntity(validCategory.Name, invalidDescription);
 
         var exception = Assert.Throws<EntityValidationException>(action);
-        Assert.Equal("Description não pode ser maior que 10.000 caracteres", exception.Message);
+        Assert.Equal("Description não pode ser maior do que 10000 caracteres", exception.Message);
     }
 
     [Fact(DisplayName = nameof(Activate))]
@@ -168,7 +168,7 @@ public class CategoryTest
         var action = () => category.Update(invalidName, "categoria description");
 
         var exception = Assert.Throws<EntityValidationException>(action);
-        Assert.Equal("Name não pode ser maior que 255 caracteres", exception.Message);
+        Assert.Equal("Name não pode ser maior do que 255 caracteres", exception.Message);
     }
 
     [Theory(DisplayName = nameof(UpdateErrorNameInvalid))]
@@ -181,7 +181,7 @@ public class CategoryTest
         var action = () => category.Update(invalidName, "categoria description");
 
         var exception = Assert.Throws<EntityValidationException>(action);
-        Assert.Equal("Name não pode ser vazio", exception.Message);
+        Assert.Equal("Name não pode ser nulo ou vazio", exception.Message);
     }
 
     [Theory(DisplayName = nameof(UpdateErrorWhenNameIsLessThan3Characters))]
@@ -195,7 +195,7 @@ public class CategoryTest
         var action = () => category.Update(invalidName, "categoria description");
 
         var exception = Assert.Throws<EntityValidationException>(action);
-        Assert.Equal("Name tem que ser maior que 3 caracteres", exception.Message);
+        Assert.Equal("Name não pode ser menor do que 3 caracteres", exception.Message);
     }
 
     [Fact(DisplayName = nameof(UpdateErrorWhenNameIsGreatherThan10000Characters))]
@@ -207,7 +207,7 @@ public class CategoryTest
         var action = () => category.Update("Categoria name", invalidDescription);
 
         var exception = Assert.Throws<EntityValidationException>(action);
-        Assert.Equal("Description não pode ser maior que 10.000 caracteres", exception.Message);
+        Assert.Equal("Description não pode ser maior do que 10000 caracteres", exception.Message);
     }
 
     private DomainEntity GetValidCategory()
