@@ -15,11 +15,13 @@ public static class DomainValidation
         if (string.IsNullOrWhiteSpace(target))
             throw new EntityValidationException($"{fieldname} não pode ser nulo ou vazio");
     }
+
     public static void MinLenght(string target, int minLenght, string fieldname)
     {
         if (target.Length < minLenght)
             throw new EntityValidationException($"{fieldname} não pode ser menor do que {minLenght} caracteres");
     }
+
     public static void MaxLenght(string target, int maxLenght, string fieldname)
     {
         if (target.Length > maxLenght)
